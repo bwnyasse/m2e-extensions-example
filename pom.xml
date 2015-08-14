@@ -17,7 +17,8 @@
 
 	<modules>
 		<module>mojo</module>
-		<module>plugins</module>
+		<!--  <module>plugins</module>-->
+		<module>sample</module>
 	</modules>
 
 	<properties>
