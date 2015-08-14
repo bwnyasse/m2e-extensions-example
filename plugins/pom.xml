@@ -140,6 +140,6 @@
 	</profiles>
 	<modules>
 		<module>net.bwnyasse.m2e.extensions.example.plugins.core</module>
-		<module>net.bwnyasse.m2e.extensions.example.plugins.test</module>
+		<!-- <module>net.bwnyasse.m2e.extensions.example.plugins.test</module> -->
 	</modules>
 </project>
