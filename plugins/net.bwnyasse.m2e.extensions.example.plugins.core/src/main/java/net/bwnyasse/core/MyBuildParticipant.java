@@ -3,6 +3,8 @@ package net.bwnyasse.core;
 import java.util.Set;
 
 import org.apache.maven.plugin.MojoExecution;
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.m2e.core.project.configurator.MojoExecutionBuildParticipant;
@@ -12,6 +14,10 @@ import org.eclipse.m2e.core.project.configurator.MojoExecutionBuildParticipant;
  */
 public class MyBuildParticipant extends MojoExecutionBuildParticipant
 {
+
+	private static final String MOJO_GAV = "";
+
+	private static final String M2E_COMPLIANT_ATTRIBUTE = "m2eCompliant";
 
 	public MyBuildParticipant(MojoExecution execution)
 	{
@@ -28,8 +34,23 @@ public class MyBuildParticipant extends MojoExecutionBuildParticipant
 	@Override
 	public Set<IProject> build(int kind, IProgressMonitor monitor) throws Exception
 	{
-		// TODO
 
+		if (isM2ECompliant(getMavenProjectFacade().getMavenProject(monitor)))
+		{
+			// Concrete execution of the mojo
+			return super.build(kind, monitor);
+		}
 		return null;
+	}
+
+	private boolean isM2ECompliant(MavenProject mavenProject)
+	{
+		Xpp3Dom configuration = (Xpp3Dom)mavenProject.getPlugin(MOJO_GAV).getConfiguration();
+		if (configuration == null)
+		{
+			return false;
+		}
+		Xpp3Dom m2eCompliantXmlNode = configuration.getChild(M2E_COMPLIANT_ATTRIBUTE);
+		return (m2eCompliantXmlNode != null) && Boolean.parseBoolean(m2eCompliantXmlNode.getValue());
 	}
 }
